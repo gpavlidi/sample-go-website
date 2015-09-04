@@ -11,7 +11,7 @@ import (
 	//"github.com/gorilla/mux"
 	"github.com/gorilla/context"
 	"github.com/gorilla/handlers"
-	mw "github.com/gpavlidi/gowebsite/middlewares"
+	mw "github.com/gpavlidi/go-website/middlewares"
 	"github.com/julienschmidt/httprouter"
 )
 

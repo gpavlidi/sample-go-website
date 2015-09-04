@@ -2,10 +2,11 @@ package middlewares
 
 import (
 	"database/sql"
-	"github.com/gorilla/context"
-	"github.com/gorilla/handlers"
 	"net/http"
 	"os"
+
+	"github.com/gorilla/context"
+	"github.com/gorilla/handlers"
 )
 
 func SetHeader(headerKey, headerVal string) func(http.Handler) http.Handler {

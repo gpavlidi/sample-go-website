@@ -1,9 +1,10 @@
 package controllers
 
 import (
-	"github.com/gpavlidi/gowebsite/helpers"
 	"html/template"
 	"net/http"
+
+	"github.com/gpavlidi/go-website/helpers"
 )
 
 var staticTemplates map[string]*template.Template

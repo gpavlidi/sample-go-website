@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/gpavlidi/gowebsite/controllers"
+	"github.com/gpavlidi/go-website/controllers"
 )
 
 type Route struct {
