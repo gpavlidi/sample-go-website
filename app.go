@@ -8,11 +8,11 @@ import (
 	"net/http"
 	"os"
 
-	//"github.com/gorilla/mux"
 	"github.com/gorilla/context"
 	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+	//"github.com/julienschmidt/httprouter"
 	mw "github.com/gpavlidi/go-website/middlewares"
-	"github.com/julienschmidt/httprouter"
 )
 
 type AppConfig struct {
@@ -36,7 +36,7 @@ func NewApp(cfg *AppConfig) *App {
 	//Db := NewDb("sqlite3", ":memory:")
 	Db := NewDb("sqlite3", "./site.db")
 
-	handler := mw.UseOn(router, mw.SetDB(Db), mw.LogRequest(os.Stdout), handlers.CompressHandler, mw.SetHeader("test1", "boom"), context.ClearHandler)
+	handler := mw.UseOn(router, mw.SetDB(Db), handlers.HTTPMethodOverrideHandler, mw.LogRequest(os.Stdout), handlers.CompressHandler, mw.SetHeader("test1", "boom"), context.ClearHandler)
 
 	app := &App{handler, log, cfg, Db}
 
@@ -48,7 +48,6 @@ func NewDb(driver, dsn string) *sql.DB {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
@@ -62,16 +61,22 @@ func NewDb(driver, dsn string) *sql.DB {
 // https://gowalker.org/net/http#ListenAndServe
 func (app *App) ListenAndServe() {
 	http.ListenAndServe(app.Config.Addr, app.Handler)
+	app.Db.Close()
 }
 
-func newRouter(routes Routes) *httprouter.Router /**mux.Router*/ {
+func newRouter(routes Routes) *mux.Router /**httprouter.Router *mux.Router*/ {
+	// switched back to gorilla mux because it keeps handlers compatible with http.HandlerFunc
+	// because it carries the params through the mutex
+	// httprouter adds a 3rd parameter to HandlerFunc for the params, breaking the interface
+	//
+
 	// native golang mux
 	/*mux := http.NewServeMux()
 	for _, rt := range routes {
 		mux.HandleFunc(rt.Pattern, rt.HandlerFunc)
 	}*/
 	//gorilla mux, offers more stuff like per Method routes
-	/*router := mux.NewRouter().StrictSlash(true)
+	router := mux.NewRouter().StrictSlash(true)
 	for _, rt := range routes {
 		router.
 			Methods(rt.Method).
@@ -81,16 +86,15 @@ func newRouter(routes Routes) *httprouter.Router /**mux.Router*/ {
 	}
 	// Path of static files must be last!
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("public")))
-	*/
 
-	router := httprouter.New()
+	/*router := httprouter.New()
 	for _, rt := range routes {
 		//router.Handler(rt.Method, rt.Pattern, middlewares.SetHeader(rt.HandlerFunc))
 		router.HandlerFunc(rt.Method, rt.Pattern, rt.HandlerFunc)
 	}
 	// hack to get httprouter to server public from root
 	// https://github.com/julienschmidt/httprouter/issues/4#issuecomment-41549684
-	router.NotFound = http.FileServer(http.Dir("public"))
+	router.NotFound = http.FileServer(http.Dir("public")) */
 
 	return router
 }

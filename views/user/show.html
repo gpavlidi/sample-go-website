@@ -1,0 +1,9 @@
+{{define "body"}}
+    <h1>User {{.Id}}</h1>
+    <p class="lead">{{.FirstName}} {{.LastName}}</p>
+    <a href="/users/{{.Id}}/edit">Edit<a>
+{{end}}
+
+{{ define "head"}}
+    <title>User {{.Id}}</title>
+{{ end }}

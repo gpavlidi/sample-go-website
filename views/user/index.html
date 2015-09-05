@@ -2,7 +2,25 @@
     <h1>Users</h1>
     <p class="lead">______</p>
     <ul class="list-unstyled">
-        <li>User 1</li>
-        <li>User 2</li>
+    	{{range $user := .}}
+    		<li>
+    			<a href="/users/{{$user.Id}}"> 
+    				{{$user.Id}}. {{$user.FirstName}} {{$user.LastName}}
+    			</a>
+    			<form accept-charset="UTF-8" action="/users/{{$user.Id}}" method="post">
+    				<div style="display:none">
+			    		<input name="_method" type="hidden" value="DELETE">
+			    	</div>
+			    	<a href="#" onclick="$('form').submit(); return false;">Delete</a>
+    				<!--input class="button small" name="commit" type="submit" value="Delete"-->
+    			</form>
+    		</li>
+    	{{end}}
     </ul>
+
+    <br/><a href="/users/new">Add New User</a> 
 {{end}}
+
+{{ define "head"}}
+    <title>Users</title>
+{{ end }}

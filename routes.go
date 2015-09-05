@@ -20,4 +20,11 @@ var routes = Routes{
 	Route{"StaticContact", "GET", "/contact", controllers.StaticContact},
 
 	Route{"UserIndex", "GET", "/users", controllers.UserIndex},
+	Route{"UserShow", "GET", "/users/{id:[0-9]+}", controllers.UserShow},
+	Route{"UserEdit", "GET", "/users/{id:[0-9]+}/edit", controllers.UserEdit},
+	Route{"UserNew", "GET", "/users/new", controllers.UserNew},
+	//API endpoints
+	Route{"UserPost", "POST", "/users", controllers.UserPost},
+	Route{"UserUpdate", "PATCH", "/users/{id:[0-9]+}", controllers.UserUpdate},
+	Route{"UserDelete", "DELETE", "/users/{id:[0-9]+}", controllers.UserDelete},
 }

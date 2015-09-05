@@ -1,0 +1,28 @@
+{{define "body"}}
+    <h1>New User</h1>
+
+    <form accept-charset="UTF-8" action="/users" method="post">
+
+    	<div class="field">
+			<label for="first_name">First Name</label><br>
+		    <input id="first_name" name="user[first_name]" type="text" value="">
+		</div>
+
+		<div class="field">
+			<label for="last_name">Last Name</label><br>
+		    <input id="last_name" name="user[last_name]" type="text" value="">
+		</div>
+
+		<div class="actions">
+		    <input class="button small" name="commit" type="submit" value="Create User">
+		</div>
+
+    </form>
+
+    <br/>
+    <a href="/users">Back<a>
+{{end}}
+
+{{ define "head"}}
+    <title>New User</title>
+{{ end }}
